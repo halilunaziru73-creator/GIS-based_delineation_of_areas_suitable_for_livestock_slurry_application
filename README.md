@@ -71,5 +71,4 @@ in [`Slurry_Suitability_Tudela_Report.docx`](./Slurry_Suitability_Tudela_Report.
 
 ## License
 
-No license has been specified yet — all rights reserved by default. Add a
-`LICENSE` file if you'd like to permit reuse.
+Released under the [MIT License](./LICENSE).
