@@ -1,0 +1,14 @@
+# GDAL-dependent packages (geopandas, rasterio, fiona) are most reliably
+# installed via conda-forge: conda install -c conda-forge geopandas rasterio fiona
+geopandas
+rasterio
+shapely
+pyproj
+fiona
+pykrige
+scikit-learn
+tensorflow
+matplotlib
+pandas
+numpy
+scipy
