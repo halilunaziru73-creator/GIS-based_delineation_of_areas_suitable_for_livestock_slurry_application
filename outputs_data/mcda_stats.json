@@ -1,0 +1,15 @@
+{
+  "candidate_pct_of_AOI": 5.351671974893564,
+  "candidate_pct_of_Tudela": 5.351634541626544,
+  "candidate_area_km2": 14.345625,
+  "SI_mean": 76.4198989868164,
+  "SI_sd": 14.996347427368164,
+  "SI_min": 13.253705024719238,
+  "SI_max": 99.94234466552734,
+  "weights": {
+    "slope": 0.3,
+    "water": 0.25,
+    "urban": 0.2,
+    "protected": 0.25
+  }
+}
