@@ -194,8 +194,41 @@ little spatial structure in its errors).
 │   ├── make_figures_1.py … make_figures_5.py
 │   └── cartohelpers.py                                # shared cartographic helpers (scale bar, north arrow, styling)
 ├── figures/                                           # All 12 publication-quality figures (300 dpi PNG)
-└── outputs_data/                                      # Numeric results (JSON) and pseudo-observation points (CSV)
+├── outputs_data/                                      # Numeric results (JSON) and pseudo-observation points (CSV)
+└── source_data/                                       # Original 8 source GIS layers (see "Source Data" section below)
+    ├── AOI/
+    ├── Digital elevation model/
+    ├── Land use-Land cover/
+    ├── Municipal boundary/
+    ├── Nitrate vulnerable and polluted water zones/
+    ├── Protected natural areas/
+    ├── Surface water bodies/
+    └── Urban areas/
 ```
+
+---
+
+## Source Data
+
+The 8 original GIS input layers are included directly in [`source_data/`](./source_data),
+so the pipeline can be reproduced without sourcing external data separately:
+
+| Layer | Contents | Format |
+|---|---|---|
+| `AOI/` | Study-area boundary, DEM subset, lithology, DPH (public hydraulic domain), NVZ clips | Shapefile + GeoTIFF |
+| `Digital elevation model/` | MDT25 (25 m) elevation tiles covering the study area | GeoTIFF |
+| `Land use-Land cover/` | SIGPAC agricultural parcel polygons + IDUSO land-use code dictionary | Shapefile + CSV/XLSX |
+| `Municipal boundary/` | National INSPIRE municipal boundary dataset | Shapefile |
+| `Nitrate vulnerable and polluted water zones/` | Designated NVZ boundaries | Shapefile |
+| `Protected natural areas/` | Protected natural area polygons | Shapefile |
+| `Surface water bodies/` | Public hydraulic domain, wetlands, and buffer-strip polygons | Shapefile |
+| `Urban areas/` | IGRPO urban land-registry geopackage | GeoPackage |
+
+> **Note on file size:** `Municipal boundary/…shp` (61.8 MB) and
+> `Urban areas/…gpkg` (76.0 MB) exceed GitHub's recommended 50 MB soft limit
+> (though both are under the 100 MB hard limit and pushed successfully). If
+> you fork this repository and plan to modify these files, consider migrating
+> them to [Git LFS](https://git-lfs.github.com/).
 
 ---
 
@@ -219,9 +252,20 @@ pip install geopandas rasterio shapely pyproj fiona pykrige scikit-learn tensorf
 
 ### 3. Reproducing the Analysis
 
-Run in order from a directory containing the original 9 unzipped source layers
-(`AOI/`, `Digital_elevation_model/` → merged into `AOI/AOI/DEM_AOI.tif`, etc.), adjusting
-the `DATA` / `OUT` path constants at the top of each script as needed:
+The 8 source layers are already included in [`source_data/`](./source_data), but
+the scripts currently hardcode an absolute `DATA` path from the original
+build environment (e.g. `DATA = "/home/claude/work/data"` in
+`build_covariates.py`). Before running, either:
+
+- **(a)** edit the `DATA` (and `OUT`) constant at the top of each script to
+  point at your local copy of `source_data/`, or
+- **(b)** symlink/copy `source_data/` to match the hardcoded path, e.g.:
+  ```bash
+  mkdir -p /home/claude/work
+  ln -s "$(pwd)/source_data" /home/claude/work/data
+  ```
+
+Then run in order from the repository root:
 
 ```bash
 python code/build_covariates.py      # → covariates.npz, grid_meta.json
