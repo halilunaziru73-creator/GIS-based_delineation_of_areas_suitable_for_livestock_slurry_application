@@ -237,12 +237,6 @@ python code/make_figures_5.py        # ┘
 
 ---
 
-## Documents
-
-| Document | Description |
-|---|---|
-| [`Tudela_Slurry_Suitability_Merged_Report.docx`](./Tudela_Slurry_Suitability_Merged_Report.docx) | Combined report covering the MCDA overlay and the RK/DL suitability modelling |
-| [`manuscript/Slurry_Suitability_RegressionKriging_DeepLearning_Manuscript.docx`](./manuscript/Slurry_Suitability_RegressionKriging_DeepLearning_Manuscript.docx) | Q1-journal-style manuscript with clickable internal citations |
 
 ---
 
