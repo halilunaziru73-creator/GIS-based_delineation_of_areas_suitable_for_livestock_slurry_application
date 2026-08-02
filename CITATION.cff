@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "GIS-based Delineation of Areas Suitable for Livestock Slurry Application: A Case Study of Tudela, Navarre, Spain"
+authors:
+  - family-names: Halilu
+    given-names: Naziru
+repository-code: "https://github.com/halilunaziru73-creator/GIS-based_delineation_of_areas_suitable_for_livestock_slurry_application"
+license: MIT
+date-released: "2026-08-02"
+keywords:
+  - GIS
+  - multicriteria decision analysis
+  - land suitability analysis
+  - Spain
+  - agriculture
