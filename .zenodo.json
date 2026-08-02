@@ -1,0 +1,20 @@
+{
+  "title": "GIS-based Delineation of Areas Suitable for Livestock Slurry Application: A Case Study of Tudela, Navarre, Spain",
+  "description": "GIS multicriteria delineation of areas suitable for livestock slurry application \u2014 case study in Tudela, Navarre, Spain.",
+  "creators": [
+    {
+      "name": "Halilu, Naziru",
+      "orcid": "0009-0006-2324-9599"
+    }
+  ],
+  "keywords": [
+    "GIS",
+    "multicriteria decision analysis",
+    "land suitability analysis",
+    "Spain",
+    "agriculture"
+  ],
+  "license": "MIT",
+  "upload_type": "software",
+  "access_right": "open"
+}
