@@ -5,6 +5,7 @@
 ### Case Study — Tudela, Navarre, Spain
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21760027.svg)](https://doi.org/10.5281/zenodo.21760027)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![Domain](https://img.shields.io/badge/domain-GIS%20%7C%20Geostatistics%20%7C%20Deep%20Learning-informational)
