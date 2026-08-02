@@ -199,10 +199,25 @@ little spatial structure in its errors).
 
 ---
 
-## Reproducing the Analysis
+## How to Run the Code
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/halilunaziru73-creator/GIS-based_delineation_of_areas_suitable_for_livestock_slurry_application.git
+cd GIS-based_delineation_of_areas_suitable_for_livestock_slurry_application
+```
+
+### 2. Install dependencies
 
 **Requirements:** `geopandas`, `rasterio`, `shapely`, `pyproj`, `fiona`, `pykrige`,
 `scikit-learn`, `tensorflow`, `matplotlib`, `pandas`, `numpy`, `scipy`
+
+```bash
+pip install geopandas rasterio shapely pyproj fiona pykrige scikit-learn tensorflow matplotlib pandas numpy scipy
+```
+
+### 3. Reproducing the Analysis
 
 Run in order from a directory containing the original 9 unzipped source layers
 (`AOI/`, `Digital_elevation_model/` → merged into `AOI/AOI/DEM_AOI.tif`, etc.), adjusting
