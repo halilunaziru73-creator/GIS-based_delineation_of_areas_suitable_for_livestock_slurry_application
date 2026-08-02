@@ -291,6 +291,12 @@ Released under the [MIT License](./LICENSE).
 
 ---
 
+## Citation
+
+If you use this repository, please cite it using the metadata in
+[`CITATION.cff`](./CITATION.cff) (GitHub renders a "Cite this repository"
+button on the repo's main page, in the top-right "About" panel).
+
 ## Related work
 
 Part of a broader body of research on GIS, remote sensing, and machine
