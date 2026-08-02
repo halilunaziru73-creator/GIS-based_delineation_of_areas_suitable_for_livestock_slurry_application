@@ -1,71 +1,78 @@
 # GIS-based Delineation of Areas Suitable for Livestock Slurry Application
 
 **Case study: Tudela, Navarre, Spain**
-**Author:** Naziru Halilu
+Author: Naziru Halilu
 
-A pure-Python implementation of a GIS multicriteria decision analysis (MCDA)
-workflow for identifying land suitable for livestock slurry application, applied
-to real geospatial datasets for the municipality of Tudela (municipal boundary,
-DEM, lithology, surface water / DPH, urban areas, protected natural areas,
-Nitrate Vulnerable Zones, and SIGPAC land use/land cover).
+GIS multicriteria delineation of areas suitable for livestock slurry application, extended
+with continuous geostatistical and deep-learning suitability surfaces:
 
-All geoprocessing primitives typically supplied by GDAL, GEOS, QGIS, rasterio,
-Fiona, geopandas, or pyproj — shapefile parsing, reprojection, polygon
-rasterisation, buffering, raster algebra, and zonal statistics — are implemented
-from scratch in pure Python, making the pipeline fully self-contained.
-
-Output figures follow a QGIS-style print-layout composition: a map panel with a
-neatline border, a bordered legend panel, a north arrow, a scale bar, and
-source/author credits placed in a reserved margin.
+- A rule-based GIS-MCDA hard-constraint suitability overlay (candidate zone delineation)
+- A continuous fuzzy Suitability Index (SI) inside the candidate zone
+- **Regression Kriging** (linear-trend and random-forest-trend variants, via PyKrige)
+- **Deep learning surrogates**: a dense MLP and a patch-based CNN (TensorFlow/Keras)
+- Full validation: spatial block cross-validation, Moran's I of residuals, permutation
+  importance, and a Taylor diagram
 
 ## Repository structure
 
 ```
 .
-├── Slurry_Suitability_Tudela_Report.docx   # Full written report
-└── code_package/
-    ├── README.md                           # Detailed code documentation
-    ├── code/
-    │   ├── miniogr.py         # Pure-Python ESRI Shapefile/DBF reader
-    │   ├── geomtools.py       # Polygon rasterisation + distance-raster buffering
-    │   ├── muniextract.py     # Single-feature extraction from a national shapefile
-    │   ├── proj_utm.py        # ETRS89 geographic → UTM zone 30N reprojection
-    │   ├── run_analysis.py    # Main analysis pipeline (Steps 1–12)
-    │   └── make_figures.py    # QGIS-style cartographic figure generation
-    ├── figures/                            # 11 output figures (220 dpi PNG)
-    └── outputs/
-        ├── stats.json                      # Final area statistics
-        └── zonal_stats_TA_PS_parcels.csv   # Per-parcel suitability scores (9,116 parcels)
+├── Tudela_Slurry_Suitability_Merged_Report.docx     # Combined report: MCDA + RK/DL methodology and results
+├── manuscript/
+│   └── Slurry_Suitability_RegressionKriging_DeepLearning_Manuscript.docx
+│                                                      # Q1-journal-style manuscript, 15 pages, 12 figures,
+│                                                      # 2 tables, 14 references (clickable internal citations)
+├── code/                                             # Full reproducible Python pipeline (run in order below)
+│   ├── build_covariates.py
+│   ├── mcda_reference.py
+│   ├── sample_points.py
+│   ├── regression_kriging.py
+│   ├── deep_learning.py
+│   ├── validation_stats.py
+│   ├── make_figures_1.py … make_figures_5.py
+│   └── cartohelpers.py                               # shared cartographic helpers (scale bar, north arrow, styling)
+├── figures/                                          # All 12 publication-quality figures (300 dpi PNG)
+└── outputs_data/                                     # Numeric results (JSON) and pseudo-observation sample points (CSV)
 ```
-
-## Requirements
-
-- Python 3
-- numpy, scipy, scikit-image, matplotlib, pillow, pandas
-
-No GDAL / GEOS / rasterio / geopandas / QGIS required.
 
 ## Reproducing the analysis
 
-1. Point `DATA` in `code_package/code/run_analysis.py` at the source datasets
-   (AOI, DEM, land use/land cover, municipal boundary, nitrate vulnerable and
-   polluted water zones, protected natural areas, soil characteristics, surface
-   water bodies, urban areas).
-2. Run the analysis pipeline:
-   ```bash
-   python code_package/code/run_analysis.py
-   ```
-   This writes `layers.npz`, `stats.json`, and `zonal_stats_TA_PS_parcels.csv`.
-3. Generate the figures:
-   ```bash
-   python code_package/code/make_figures.py
-   ```
-   This writes `fig1.png` through `fig11.png`.
+Requires: `geopandas`, `rasterio`, `shapely`, `pyproj`, `fiona`, `pykrige`, `scikit-learn`,
+`tensorflow`, `matplotlib`, `pandas`, `numpy`, `scipy`.
 
-## Report
+Run in this order from a directory containing the original 9 unzipped source layers
+(`AOI/`, `Digital_elevation_model/` → merged into `AOI/AOI/DEM_AOI.tif`, etc.), adjusting the
+`DATA`/`OUT` path constants at the top of each script as needed:
 
-The full methodology, criteria weighting, and results discussion are documented
-in [`Slurry_Suitability_Tudela_Report.docx`](./Slurry_Suitability_Tudela_Report.docx).
+1. `build_covariates.py` — builds the 25 m raster covariate stack (slope, distances, soil, land use, NVZ) → `covariates.npz`, `grid_meta.json`
+2. `mcda_reference.py` — hard-constraint candidate zone + continuous fuzzy SI → `mcda_reference.npz`, `mcda_stats.json`
+3. `sample_points.py` — pseudo-observation network + spatial block train/test split → `sample_points.csv`
+4. `regression_kriging.py` — RK-LM and RK-RF (PyKrige `RegressionKriging`), variogram fitting, full-grid prediction → `RK_grid_prediction.npz`, `variogram_residuals.npz`, `rk_results.json`
+5. `deep_learning.py` — DL-MLP and DL-CNN training + full-grid prediction → `DL_grid_predictions.npz`, `dl_training_history.npz`, `dl_results.json`
+6. `validation_stats.py` — Moran's I of test residuals, Taylor-diagram statistics, permutation importance → `validation_extra.json`, `feature_importance.json`
+7. `make_figures_1.py` … `make_figures_5.py` — generates all 12 figures into `figures/`
+
+## Key results (held-out spatial-block test set, n = 127)
+
+| Model  | RMSE | MAE  | R²    | Correlation | Residual Moran's I |
+|--------|------|------|-------|-------------|---------------------|
+| RK-LM  | 11.01| 8.44 | 0.531 | 0.82        | 0.043               |
+| RK-RF  | 7.78 | 6.53 | 0.765 | 0.89        | 0.017               |
+| DL-MLP | 9.92 | 7.49 | 0.619 | 0.83        | 0.038               |
+| DL-CNN | 9.90 | 7.82 | 0.620 | 0.87        | 0.061               |
+
+Random-forest regression kriging (RK-RF) gave the most accurate and best spatially
+behaved reconstruction of the continuous suitability surface.
+
+## Notes on the modelling design
+
+No physical field-verified slurry-suitability monitoring network exists for the study
+area. A pseudo-observation network was generated by sampling the deterministic continuous
+MCDA suitability index at random locations within the candidate zone and adding realistic
+heteroscedastic noise — a standard benchmarking design for validating spatial-interpolation
+and machine-learning methods (cf. digital soil mapping literature, e.g. Hengl et al., 2004).
+This is stated transparently in both the manuscript and the merged report rather than
+presented as field-verified ground truth.
 
 ## License
 
