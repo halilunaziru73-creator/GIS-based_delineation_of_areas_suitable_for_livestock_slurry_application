@@ -14,3 +14,7 @@ keywords:
   - land suitability analysis
   - Spain
   - agriculture
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21760027"
+    description: "Archived snapshot of version v1.0.0 on Zenodo"
