@@ -20,4 +20,7 @@ identifiers:
 - type: doi
   value: 10.5281/zenodo.21760027
   description: Archived snapshot of version v1.0.0 on Zenodo
+- type: doi
+  value: 10.5281/zenodo.21760026
+  description: 'Concept DOI: always resolves to the latest archived version'
 version: 1.0.0
