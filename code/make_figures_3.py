@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
 
-OUT = "/home/claude/work/out"
+BASE = Path(__file__).resolve().parent.parent
+OUT = str(BASE / "outputs_data")
 FIGS = f"{OUT}/figs"
 
 hist = np.load(f"{OUT}/dl_training_history.npz")
