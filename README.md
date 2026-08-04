@@ -253,20 +253,12 @@ pip install geopandas rasterio shapely pyproj fiona pykrige scikit-learn tensorf
 
 ### 3. Reproducing the Analysis
 
-The 8 source layers are already included in [`source_data/`](./source_data), but
-the scripts currently hardcode an absolute `DATA` path from the original
-build environment (e.g. `DATA = "/home/claude/work/data"` in
-`build_covariates.py`). Before running, either:
+The 8 source layers are already included in [`source_data/`](./source_data).
+All scripts resolve `source_data/` and `outputs_data/` automatically relative
+to the repository root, so they run as-is from any location — no path
+editing required.
 
-- **(a)** edit the `DATA` (and `OUT`) constant at the top of each script to
-  point at your local copy of `source_data/`, or
-- **(b)** symlink/copy `source_data/` to match the hardcoded path, e.g.:
-  ```bash
-  mkdir -p /home/claude/work
-  ln -s "$(pwd)/source_data" /home/claude/work/data
-  ```
-
-Then run in order from the repository root:
+Run in order from the repository root:
 
 ```bash
 python code/build_covariates.py      # → covariates.npz, grid_meta.json
