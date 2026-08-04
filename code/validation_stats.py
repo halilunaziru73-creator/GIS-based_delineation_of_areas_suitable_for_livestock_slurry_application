@@ -5,7 +5,9 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.inspection import permutation_importance
 from scipy.spatial.distance import pdist, squareform
 
-OUT = "/home/claude/work/out"
+from pathlib import Path
+BASE = Path(__file__).resolve().parent.parent
+OUT = str(BASE / "outputs_data")
 df = pd.read_csv(f"{OUT}/sample_points.csv")
 test = df[df.split == "test"].reset_index(drop=True)
 yte = test["SI_obs"].values
