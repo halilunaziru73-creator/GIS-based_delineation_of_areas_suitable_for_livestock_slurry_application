@@ -2,10 +2,12 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-sys.path.insert(0, "/home/claude/work/pipeline")
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from cartohelpers import add_scalebar, add_north_arrow, style_map_axes, credit_text
 
-OUT = "/home/claude/work/out"
+BASE = Path(__file__).resolve().parent.parent
+OUT = str(BASE / "outputs_data")
 FIGS = f"{OUT}/figs"
 meta = json.load(open(f"{OUT}/grid_meta.json"))
 bounds = meta["bounds"]
