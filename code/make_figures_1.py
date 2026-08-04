@@ -5,10 +5,12 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
 import matplotlib.patches as mpatches
 import sys
-sys.path.insert(0, "/home/claude/work/pipeline")
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from cartohelpers import add_scalebar, add_north_arrow, style_map_axes, credit_text
 
-OUT = "/home/claude/work/out"
+BASE = Path(__file__).resolve().parent.parent
+OUT = str(BASE / "outputs_data")
 FIGS = f"{OUT}/figs"
 import os; os.makedirs(FIGS, exist_ok=True)
 
