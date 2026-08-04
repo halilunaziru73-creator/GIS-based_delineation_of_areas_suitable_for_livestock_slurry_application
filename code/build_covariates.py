@@ -10,8 +10,10 @@ from rasterio.features import rasterize
 from rasterio.transform import from_origin
 from scipy.ndimage import distance_transform_edt
 
-DATA = "/home/claude/work/data"
-OUT  = "/home/claude/work/out"
+from pathlib import Path
+BASE = Path(__file__).resolve().parent.parent
+DATA = str(BASE / "source_data")
+OUT  = str(BASE / "outputs_data")
 os.makedirs(OUT, exist_ok=True)
 
 PIXEL = 25.0
