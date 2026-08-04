@@ -20,7 +20,9 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 tf.random.set_seed(20260802)
 np.random.seed(20260802)
 
-OUT = "/home/claude/work/out"
+from pathlib import Path
+BASE = Path(__file__).resolve().parent.parent
+OUT = str(BASE / "outputs_data")
 cov = np.load(f"{OUT}/covariates.npz")
 ref = np.load(f"{OUT}/mcda_reference.npz")
 meta = json.load(open(f"{OUT}/grid_meta.json"))
