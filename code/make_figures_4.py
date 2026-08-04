@@ -3,7 +3,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-OUT = "/home/claude/work/out"
+BASE = Path(__file__).resolve().parent.parent
+OUT = str(BASE / "outputs_data")
 FIGS = f"{OUT}/figs"
 
 df = pd.read_csv(f"{OUT}/sample_points.csv")
