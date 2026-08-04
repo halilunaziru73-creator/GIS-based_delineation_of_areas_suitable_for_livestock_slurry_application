@@ -9,7 +9,9 @@ the deep-learning models (Stages 4-5) attempt to reconstruct from covariates.
 import json
 import numpy as np
 
-OUT = "/home/claude/work/out"
+from pathlib import Path
+BASE = Path(__file__).resolve().parent.parent
+OUT = str(BASE / "outputs_data")
 z = np.load(f"{OUT}/covariates.npz")
 
 slope_pct       = z["slope_pct"]
