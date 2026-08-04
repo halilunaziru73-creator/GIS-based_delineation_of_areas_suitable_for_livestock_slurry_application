@@ -13,7 +13,9 @@ import json
 import numpy as np
 import pandas as pd
 
-OUT = "/home/claude/work/out"
+from pathlib import Path
+BASE = Path(__file__).resolve().parent.parent
+OUT = str(BASE / "outputs_data")
 rng = np.random.default_rng(20260802)
 
 cov = np.load(f"{OUT}/covariates.npz")
