@@ -24,8 +24,13 @@
   .chip { font-size:12.5px; padding:7px 12px; border-radius:999px; border:1px solid var(--border);
     background:var(--bg); cursor:pointer; transition:.25s; color:var(--text); }
   .chip.active { background:var(--accent-bg); color:var(--accent-text); border-color:var(--accent-border); }
-  .detail { background:var(--bg); border-radius:10px; padding:1rem 1.25rem; min-height:70px;
-    display:flex; align-items:center; font-size:14.5px; line-height:1.6; }
+  .chat-row { display:flex; gap:10px; align-items:flex-start; }
+  .avatar { width:32px; height:32px; border-radius:50%; background:var(--accent-bg); color:var(--accent-text);
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; flex-shrink:0; }
+  .bubble-col { flex:1; min-width:0; }
+  .bubble-name { font-size:12px; color:var(--text-secondary); margin:0 0 4px; }
+  .bubble { background:var(--bg); border-radius:12px; border-top-left-radius:4px; padding:0.85rem 1rem;
+    min-height:52px; display:flex; align-items:center; font-size:14.5px; line-height:1.6; }
   .back { display:inline-block; margin-top:1.5rem; font-size:13px; color:var(--accent-text); text-decoration:none; }
   @media (prefers-color-scheme: dark) {
     :root { --bg:#171715; --card:#201f1c; --border:#37362f; --text:#eceae2; --text-secondary:#9c9a92;
@@ -45,7 +50,13 @@
       <circle id="particle" cx="40" cy="55" r="8" fill="var(--particle)"/>
     </svg>
     <div class="chips" id="chips"></div>
-    <div class="detail" id="detail"></div>
+    <div class="chat-row">
+      <div class="avatar" aria-hidden="true">AI</div>
+      <div class="bubble-col">
+        <p class="bubble-name">Methodology guide</p>
+        <div class="bubble" id="detail"></div>
+      </div>
+    </div>
   </div>
   <a class="back" href="../README.md">&larr; Back to README</a>
 </div>
@@ -93,7 +104,7 @@ function render() {
     c.onclick = () => { idx = i; render(); resetTimer(); };
     chipsEl.appendChild(c);
   });
-  document.getElementById('detail').textContent = steps[idx].d;
+  document.getElementById('detail').textContent = 'Step ' + (idx + 1) + ' — ' + steps[idx].t + '. ' + steps[idx].d;
   document.getElementById('particle').setAttribute('cx', nodeX(idx, steps.length));
 }
 
