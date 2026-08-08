@@ -21,6 +21,8 @@ land suitable for livestock slurry application.
 ---
 
 
+![Graphical Abstract](graphical_abstract.png)
+
 ## Problem, Methodology, and Results
 
 **Problem.** Livestock slurry can substitute mineral fertiliser when applied at the right place, time, and rate, but poses a diffuse pollution risk otherwise. Conventional GIS multicriteria decision analysis (MCDA) delineates suitable land using discrete Boolean/ordinal overlay classes, which discards the continuous, spatially autocorrelated structure of the underlying agro-environmental gradients.
