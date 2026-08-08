@@ -8,6 +8,7 @@
   :root {
     --bg: #f7f7f5; --card: #ffffff; --border: #e2e0d8; --text: #1a1a18;
     --text-secondary: #6b6a63; --accent-bg: #eaf1fb; --accent-text: #185fa5; --accent-border: #85b7eb;
+    --particle: #378ADD; --node: #b4b2a9;
   }
   * { box-sizing: border-box; }
   body { margin:0; padding:2.5rem 1.5rem; background:var(--bg); color:var(--text);
@@ -16,6 +17,9 @@
   h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
   .metric { font-size: 14px; color: var(--text-secondary); margin: 0 0 1.5rem; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+  .sim-label { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; margin: 0 0 8px; }
+  svg#sim { width: 100%; height: auto; margin-bottom: 1.25rem; }
+  #particle { transition: cx 1.6s ease-in-out; }
   .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:1.25rem; }
   .chip { font-size:12.5px; padding:7px 12px; border-radius:999px; border:1px solid var(--border);
     background:var(--bg); cursor:pointer; transition:.25s; color:var(--text); }
@@ -25,7 +29,7 @@
   .back { display:inline-block; margin-top:1.5rem; font-size:13px; color:var(--accent-text); text-decoration:none; }
   @media (prefers-color-scheme: dark) {
     :root { --bg:#171715; --card:#201f1c; --border:#37362f; --text:#eceae2; --text-secondary:#9c9a92;
-      --accent-bg:#0c447c; --accent-text:#b5d4f4; --accent-border:#185fa5; }
+      --accent-bg:#0c447c; --accent-text:#b5d4f4; --accent-border:#185fa5; --particle:#85b7eb; --node:#5f5e5a; }
   }
 </style>
 </head>
@@ -34,6 +38,12 @@
   <h1>GIS-MCDA Slurry Suitability</h1>
   <p class="metric">R² = 0.77 (best model: random-forest regression kriging)</p>
   <div class="card">
+    <p class="sim-label">Process simulation</p>
+    <svg id="sim" viewBox="0 0 680 100" role="img" aria-label="Animated process simulation">
+      <line x1="40" y1="55" x2="640" y2="55" stroke="var(--node)" stroke-width="1"/>
+      <g id="nodes"></g>
+      <circle id="particle" cx="40" cy="55" r="8" fill="var(--particle)"/>
+    </svg>
     <div class="chips" id="chips"></div>
     <div class="detail" id="detail"></div>
   </div>
@@ -44,6 +54,34 @@ const steps = [{"t": "7-criterion GIS-MCDA overlay", "d": "Principle: combine re
 let idx = 0;
 let timer = null;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const svgNS = "http://www.w3.org/2000/svg";
+
+function nodeX(i, n) {
+  const left = 40, right = 640;
+  if (n === 1) return left;
+  return left + (right - left) * (i / (n - 1));
+}
+
+function renderNodes() {
+  const g = document.getElementById('nodes');
+  g.innerHTML = '';
+  steps.forEach((s, i) => {
+    const c = document.createElementNS(svgNS, 'circle');
+    c.setAttribute('cx', nodeX(i, steps.length));
+    c.setAttribute('cy', 55);
+    c.setAttribute('r', 5);
+    c.setAttribute('fill', 'var(--node)');
+    g.appendChild(c);
+    const t = document.createElementNS(svgNS, 'text');
+    t.setAttribute('x', nodeX(i, steps.length));
+    t.setAttribute('y', 80);
+    t.setAttribute('text-anchor', 'middle');
+    t.setAttribute('font-size', '11');
+    t.setAttribute('fill', 'var(--text-secondary)');
+    t.textContent = (i + 1);
+    g.appendChild(t);
+  });
+}
 
 function render() {
   const chipsEl = document.getElementById('chips');
@@ -56,11 +94,13 @@ function render() {
     chipsEl.appendChild(c);
   });
   document.getElementById('detail').textContent = steps[idx].d;
+  document.getElementById('particle').setAttribute('cx', nodeX(idx, steps.length));
 }
 
 function tick() { idx = (idx + 1) % steps.length; render(); }
 function resetTimer() { if (timer) clearInterval(timer); if (!reduceMotion) timer = setInterval(tick, 2200); }
 
+renderNodes();
 render();
 resetTimer();
 </script>
