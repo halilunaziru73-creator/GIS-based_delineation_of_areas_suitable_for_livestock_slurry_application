@@ -25,12 +25,12 @@
     background:var(--bg); cursor:pointer; transition:.25s; color:var(--text); }
   .chip.active { background:var(--accent-bg); color:var(--accent-text); border-color:var(--accent-border); }
   .chat-row { display:flex; gap:10px; align-items:flex-start; }
-  .avatar { width:32px; height:32px; border-radius:50%; background:var(--accent-bg); color:var(--accent-text);
-    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; flex-shrink:0; }
+  .avatar { width:36px; height:36px; border-radius:50%; flex-shrink:0; object-fit:cover; border:1px solid var(--border); }
   .bubble-col { flex:1; min-width:0; }
   .bubble-name { font-size:12px; color:var(--text-secondary); margin:0 0 4px; }
   .bubble { background:var(--bg); border-radius:12px; border-top-left-radius:4px; padding:0.85rem 1rem;
     min-height:52px; display:flex; align-items:center; font-size:14.5px; line-height:1.6; }
+  .figure { width:100%; border-radius:10px; border:1px solid var(--border); margin-bottom:1.25rem; display:block; }
   .back { display:inline-block; margin-top:1.5rem; font-size:13px; color:var(--accent-text); text-decoration:none; }
   @media (prefers-color-scheme: dark) {
     :root { --bg:#171715; --card:#201f1c; --border:#37362f; --text:#eceae2; --text-secondary:#9c9a92;
@@ -43,6 +43,8 @@
   <h1>GIS-MCDA Slurry Suitability</h1>
   <p class="metric">R² = 0.77 (best model: random-forest regression kriging)</p>
   <div class="card">
+    <p class="sim-label">Graphical abstract</p>
+    <img class="figure" src="../graphical_abstract.png" alt="Graphical abstract for GIS-MCDA Slurry Suitability">
     <p class="sim-label">Process simulation</p>
     <svg id="sim" viewBox="0 0 680 100" role="img" aria-label="Animated process simulation">
       <line x1="40" y1="55" x2="640" y2="55" stroke="var(--node)" stroke-width="1"/>
@@ -51,9 +53,9 @@
     </svg>
     <div class="chips" id="chips"></div>
     <div class="chat-row">
-      <div class="avatar" aria-hidden="true">AI</div>
+      <img class="avatar" src="avatar.png" alt="Naziru Halilu">
       <div class="bubble-col">
-        <p class="bubble-name">Methodology guide</p>
+        <p class="bubble-name">Naziru explains this step</p>
         <div class="bubble" id="detail"></div>
       </div>
     </div>
