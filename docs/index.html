@@ -30,6 +30,8 @@
   .bubble-name { font-size:12px; color:var(--text-secondary); margin:0 0 4px; }
   .bubble { background:var(--bg); border-radius:12px; border-top-left-radius:4px; padding:0.85rem 1rem;
     min-height:52px; display:flex; align-items:center; font-size:14.5px; line-height:1.6; }
+  .step-figure { width:100%; border-radius:10px; border:1px solid var(--border); margin:12px 0 4px; display:block; }
+  .step-figure-cap { font-size:11.5px; color:var(--text-secondary); margin:0 0 12px; }
   .figure { width:100%; border-radius:10px; border:1px solid var(--border); margin-bottom:1.25rem; display:block; }
   .ask-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-top:1.25rem; }
   .ask-title { font-size:15px; font-weight:600; margin:0 0 4px; }
@@ -71,6 +73,8 @@
       <div class="bubble-col">
         <p class="bubble-name">Naziru explains this step</p>
         <div class="bubble" id="detail"></div>
+        <img class="step-figure" id="step-figure" src="" alt="">
+        <p class="step-figure-cap" id="step-figure-cap"></p>
       </div>
     </div>
   </div>
@@ -129,7 +133,7 @@ async function sendQuestion() {
 }
 </script>
 <script>
-const steps = [{"t": "7-criterion GIS-MCDA overlay", "d": "We started from the regulator's own seven-criterion checklist for where slurry can legally go \u2014 nitrate zones, slope, distance to water \u2014 the same rules an inspector would apply."}, {"t": "Continuous fuzzy index", "d": "Instead of stamping land into a handful of rigid classes, we built a continuous suitability score \u2014 the difference between a blurry photo and a sharp one of the same landscape."}, {"t": "550 block-CV samples", "d": "We deliberately tested the models on chunks of land they'd never seen in training \u2014 the honest way to check a map won't fool you once it's actually used."}, {"t": "Kriging & DL surrogates", "d": "We pitted classic geostatistics against neural networks on the exact same data \u2014 a fair fight most suitability studies never actually run."}, {"t": "Model comparison", "d": "The old-school random-forest regression kriging model beat the deep-learning surrogates outright (R\u00b2 0.77 vs 0.62) \u2014 a reminder that fancier isn't always better on modest field datasets."}, {"t": "Suitability map", "d": "Nitrate Vulnerable Zone status turned out to matter more than almost anything else \u2014 exactly the kind of regulatory reality a purely data-driven model could easily have missed."}];
+const steps = [{"t": "7-criterion GIS-MCDA overlay", "img": "../figures/fig2_exclusion_criteria.png", "d": "We started from the regulator's own seven-criterion checklist for where slurry can legally go \u2014 nitrate zones, slope, distance to water \u2014 mapped as hard exclusion layers, the same rules an inspector would apply on a site visit."}, {"t": "Continuous fuzzy index", "img": "../figures/fig4_reference_SI.png", "d": "Instead of stamping land into a handful of rigid classes, we built a continuous fuzzy weighted-linear-combination suitability score across the whole candidate zone \u2014 the difference between a blurry photo and a sharp one of the same landscape."}, {"t": "Block-CV sampling", "img": "../figures/fig3_candidate_zone_samples.png", "d": "550 pseudo-observations were drawn from the candidate zone (5.4% of the municipality) and split into spatial blocks so models are deliberately tested on land they'd never seen in training \u2014 the honest way to check a map won't fool you once it's actually used."}, {"t": "Kriging & DL", "img": "../figures/fig7_DL_architectures_training.png", "d": "We trained four different models side by side on the exact same data \u2014 linear and random-forest regression kriging against an MLP and a patch-based CNN reading local 9\u00d79 covariate neighbourhoods \u2014 a fair fight most suitability studies never actually run."}, {"t": "Comparison", "img": "../figures/fig9_taylor_diagram.png", "d": "A Taylor diagram plots every model's correlation, standard deviation and RMSE against the reference in one glance \u2014 the random-forest regression kriging model comes out closest to the target, beating the deep-learning surrogates outright (R\u00b2 0.77 vs 0.62)."}, {"t": "Suitability map", "img": "../figures/fig10_model_comparison_maps.png", "d": "Nitrate Vulnerable Zone status turned out to matter more than almost anything else in the final permutation-importance ranking \u2014 exactly the kind of regulatory reality a purely data-driven model could easily have missed."}];
 let idx = 0;
 let timer = null;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -174,6 +178,18 @@ function render() {
   });
   document.getElementById('detail').textContent = 'Step ' + (idx + 1) + ' — ' + steps[idx].t + '. ' + steps[idx].d;
   document.getElementById('particle').setAttribute('cx', nodeX(idx, steps.length));
+  const fig = document.getElementById('step-figure');
+  const cap = document.getElementById('step-figure-cap');
+  if (steps[idx].img) {
+    fig.src = steps[idx].img;
+    fig.alt = steps[idx].t;
+    fig.style.display = 'block';
+    cap.textContent = 'Figure from the manuscript — ' + steps[idx].t;
+    cap.style.display = 'block';
+  } else {
+    fig.style.display = 'none';
+    cap.style.display = 'none';
+  }
 }
 
 function tick() { idx = (idx + 1) % steps.length; render(); }
