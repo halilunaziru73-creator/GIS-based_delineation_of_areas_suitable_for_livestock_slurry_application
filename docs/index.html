@@ -41,6 +41,10 @@
     font-size:14px; font-weight:500; cursor:pointer; }
   .ask-btn:hover { opacity:.9; }
   .ask-note { font-size:12px; color:var(--text-secondary); margin-top:8px; }
+  .ask-status { font-size:13px; margin-top:10px; display:none; }
+  .ask-status.ok { color:#1d9e75; display:block; }
+  .ask-status.err { color:#e24b4a; display:block; }
+  .ask-btn:disabled { opacity:.6; cursor:default; }
   .back { display:inline-block; margin-top:1.5rem; font-size:13px; color:var(--accent-text); text-decoration:none; }
   @media (prefers-color-scheme: dark) {
     :root { --bg:#171715; --card:#201f1c; --border:#37362f; --text:#eceae2; --text-secondary:#9c9a92;
@@ -72,27 +76,56 @@
   </div>
   <div class="ask-card">
     <p class="ask-title">Ask a question about this work</p>
-    <p class="ask-sub">Send Naziru a question directly — it opens as an email you can send from your own inbox.</p>
-    <input class="ask-field" id="ask-name" type="text" placeholder="Your name (optional)">
-    <input class="ask-field" id="ask-email" type="email" placeholder="Your email (optional, so Naziru can reply)">
+    <p class="ask-sub">Send Naziru a question directly — it's delivered straight to his inbox.</p>
+    <input class="ask-field" id="ask-name" type="text" placeholder="Your name">
+    <input class="ask-field" id="ask-email" type="email" placeholder="Your email (so Naziru can reply)">
     <textarea class="ask-field" id="ask-question" placeholder="What would you like to ask about this project?"></textarea>
-    <button class="ask-btn" onclick="sendQuestion()">Send question</button>
-    <p class="ask-note">Opens your email app with the message pre-filled. Nothing is sent until you press send there.</p>
+    <button class="ask-btn" id="ask-btn" onclick="sendQuestion()">Send question</button>
+    <p class="ask-status" id="ask-status"></p>
   </div>
   <a class="back" href="../README.md">&larr; Back to README</a>
 </div>
 <script>
-function sendQuestion() {
+async function sendQuestion() {
   const name = document.getElementById('ask-name').value.trim();
   const email = document.getElementById('ask-email').value.trim();
   const question = document.getElementById('ask-question').value.trim();
-  if (!question) { document.getElementById('ask-question').focus(); return; }
-  const subject = encodeURIComponent('Question about: GIS-MCDA Slurry Suitability');
-  let body = question;
-  if (name) body += '\n\n\u2014 ' + name;
-  if (email) body += ' (' + email + ')';
-  const mailto = 'mailto:halilunaziru73@gmail.com?subject=' + subject + '&body=' + encodeURIComponent(body);
-  window.location.href = mailto;
+  const status = document.getElementById('ask-status');
+  const btn = document.getElementById('ask-btn');
+  status.className = 'ask-status';
+  if (!question) { status.textContent = 'Please enter a question.'; status.className = 'ask-status err'; return; }
+  if (!email) { status.textContent = 'Please enter your email so Naziru can reply.'; status.className = 'ask-status err'; return; }
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        access_key: 'b58a03ec-1761-4115-8b5b-7bba5bc4b65a',
+        subject: 'Question about: GIS-MCDA Slurry Suitability',
+        name: name || 'Anonymous',
+        email: email,
+        message: question
+      })
+    });
+    const result = await res.json();
+    if (result.success) {
+      status.textContent = 'Sent — Naziru will reply to your email.';
+      status.className = 'ask-status ok';
+      document.getElementById('ask-name').value = '';
+      document.getElementById('ask-email').value = '';
+      document.getElementById('ask-question').value = '';
+    } else {
+      status.textContent = 'Something went wrong. Please try again.';
+      status.className = 'ask-status err';
+    }
+  } catch (e) {
+    status.textContent = 'Network error. Please try again.';
+    status.className = 'ask-status err';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Send question';
 }
 </script>
 <script>
