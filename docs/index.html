@@ -286,11 +286,28 @@ function render() {
 }
 
 function tick() { idx = (idx + 1) % steps.length; render(); }
-function resetTimer() { if (timer) clearInterval(timer); if (!reduceMotion) timer = setInterval(tick, 2200); }
+let simInView = true;
+function resetTimer() {
+  if (timer) clearInterval(timer);
+  if (!reduceMotion && simInView) timer = setInterval(tick, 2200);
+}
 
 renderNodes();
 render();
 resetTimer();
+
+const simObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    simInView = entry.isIntersecting;
+    if (simInView) {
+      resetTimer();
+    } else if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  });
+}, { threshold: 0.15 });
+simObserver.observe(document.getElementById('sim'));
 </script>
 </body>
 </html>
