@@ -34,6 +34,13 @@
   h1 { font-size: 21px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.01em; }
   .metric { font-size: 14px; color: var(--text-secondary); margin: 0 0 1.75rem; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+  .solve-card { background: var(--accent-bg); border: 1px solid var(--accent-border); border-radius: 12px;
+    padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
+  .solve-row { display:flex; gap:12px; margin-bottom:10px; align-items:flex-start; }
+  .solve-row:last-child { margin-bottom:0; }
+  .solve-tag { font-size:11px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:var(--accent-text);
+    width:78px; flex-shrink:0; padding-top:1px; }
+  .solve-text { font-size:14px; line-height:1.55; color:var(--text); }
   .sim-label { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; margin: 0 0 8px; font-weight: 600; }
   svg#sim { width: 100%; height: auto; margin-bottom: 1.25rem; }
   #particle { transition: cx 1.6s ease-in-out; }
@@ -130,6 +137,11 @@
   </div>
   <h1>GIS-MCDA Slurry Suitability</h1>
   <p class="metric">R² = 0.77 (best model: random-forest regression kriging)</p>
+  <div class="solve-card">
+    <div class="solve-row"><span class="solve-tag">Problem</span><span class="solve-text">Farmers spread livestock slurry as fertiliser, but standard maps only say 'yes' or 'no' to a zone, ignoring how risk actually varies across a field.</span></div>
+    <div class="solve-row"><span class="solve-tag">Solution</span><span class="solve-text">A continuous, regulator-compliant suitability surface built with regression kriging, tested head-to-head against deep learning.</span></div>
+    <div class="solve-row"><span class="solve-tag">Impact</span><span class="solve-text">R² = 0.77, beating both the old Boolean overlay and fancier deep-learning alternatives.</span></div>
+  </div>
   <div class="card">
     <p class="sim-label">Graphical abstract</p>
     <img class="figure" src="graphical_abstract.png" alt="Graphical abstract for GIS-MCDA Slurry Suitability">
