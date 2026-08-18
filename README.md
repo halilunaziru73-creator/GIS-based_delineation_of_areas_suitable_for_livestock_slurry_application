@@ -21,8 +21,6 @@ land suitable for livestock slurry application.
 ---
 
 
-![Graphical Abstract](graphical_abstract.png)
-
 **Workflow sketch**
 
 ![Workflow Sketch](workflow_sketch.png)
