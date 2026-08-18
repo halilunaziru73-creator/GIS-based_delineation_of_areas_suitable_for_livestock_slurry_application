@@ -50,6 +50,20 @@
   .step-figure { width:100%; border-radius:10px; border:1px solid var(--border); margin:12px 0 4px; display:block; }
   .step-figure-cap { font-size:11.5px; color:var(--text-secondary); margin:0 0 12px; }
   .figure { width:100%; border-radius:10px; border:1px solid var(--border); margin-bottom:1.25rem; display:block; }
+  .convo-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-top:1.25rem; }
+  .convo-title { font-size:15px; font-weight:600; margin:0 0 4px; }
+  .convo-sub { font-size:13px; color:var(--text-secondary); margin:0 0 1rem; }
+  .convo-controls { display:flex; align-items:center; gap:10px; margin-bottom:1rem; }
+  .convo-progress { flex:1; height:4px; background:var(--bg); border-radius:99px; overflow:hidden; }
+  .convo-progress-bar { height:100%; background:var(--accent-text); width:0%; transition:width .3s linear; }
+  .convo-counter { font-size:12px; color:var(--text-secondary); white-space:nowrap; }
+  .convo-log { max-height:340px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; padding-right:4px; }
+  .convo-row { display:flex; gap:10px; align-items:flex-start; }
+  .convo-row.mine { flex-direction:row-reverse; }
+  .convo-avatar { width:30px; height:30px; border-radius:50%; flex-shrink:0; object-fit:cover; border:1px solid var(--border); }
+  .convo-bubble { background:var(--bg); border-radius:12px; padding:0.7rem 0.95rem; font-size:14px; line-height:1.55; max-width:calc(100% - 80px); }
+  .convo-bubble.q { border-top-left-radius:4px; }
+  .convo-bubble.a { border-top-right-radius:4px; background:var(--accent-bg); color:var(--accent-text); }
   .ask-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-top:1.25rem; }
   .ask-title { font-size:15px; font-weight:600; margin:0 0 4px; }
   .ask-sub { font-size:13px; color:var(--text-secondary); margin:0 0 1rem; }
@@ -134,6 +148,16 @@
         <p class="step-figure-cap" id="step-figure-cap"></p>
       </div>
     </div>
+  </div>
+  <div class="convo-card">
+    <p class="convo-title">Full conversation walkthrough</p>
+    <p class="convo-sub">A complete, in-depth explanation of this project, turn by turn. Runs about 5 minutes if you let it play.</p>
+    <div class="convo-controls">
+      <button class="ask-btn" id="convo-play-btn" onclick="convoToggle()">Play</button>
+      <div class="convo-progress"><div class="convo-progress-bar" id="convo-progress-bar"></div></div>
+      <span class="convo-counter" id="convo-counter"></span>
+    </div>
+    <div class="convo-log" id="convo-log"></div>
   </div>
   <div class="ask-card">
     <p class="ask-title">Ask a question about this work</p>
@@ -223,6 +247,79 @@ function renderViva() {
 
 function vivaNext() { vivaIdx = (vivaIdx + 1) % vivaPairs.length; renderViva(); }
 function vivaPrev() { vivaIdx = (vivaIdx - 1 + vivaPairs.length) % vivaPairs.length; renderViva(); }
+</script>
+<script>
+const convoTurns = [{"q": "Let's start from the top. What is GIS-MCDA Slurry Suitability actually about?", "a": "At a high level, this project is about 7-criterion gis-mcda overlay through to suitability map, and the headline result is r\u00b2 = 0.77 (best model: random-forest regression kriging). Let me walk you through it step by step, the way it actually unfolds."}, {"q": "Step 1: can you explain 7-criterion gis-mcda overlay in more depth?", "a": "We started from the regulator's own seven-criterion checklist for where slurry can legally go, nitrate zones, slope, distance to water, mapped as hard exclusion layers, the same rules an inspector would apply on a site visit."}, {"q": "Step 2: can you explain continuous fuzzy index in more depth?", "a": "Instead of stamping land into a handful of rigid classes, we built a continuous fuzzy weighted-linear-combination suitability score across the whole candidate zone, the difference between a blurry photo and a sharp one of the same landscape."}, {"q": "Step 3: can you explain block-cv sampling in more depth?", "a": "550 pseudo-observations were drawn from the candidate zone (5.4% of the municipality) and split into spatial blocks so models are deliberately tested on land they'd never seen in training, the honest way to check a map won't fool you once it's actually used."}, {"q": "Step 4: can you explain kriging & dl in more depth?", "a": "We trained four different models side by side on the exact same data, linear and random-forest regression kriging against an MLP and a patch-based CNN reading local 9\u00d79 covariate neighbourhoods, a fair fight most suitability studies never actually run."}, {"q": "Step 5: can you explain comparison in more depth?", "a": "A Taylor diagram plots every model's correlation, standard deviation and RMSE against the reference in one glance, the random-forest regression kriging model comes out closest to the target, beating the deep-learning surrogates outright (R\u00b2 0.77 vs 0.62)."}, {"q": "Step 6: can you explain suitability map in more depth?", "a": "Nitrate Vulnerable Zone status turned out to matter more than almost anything else in the final permutation-importance ranking, exactly the kind of regulatory reality a purely data-driven model could easily have missed."}, {"q": "Who actually benefits from this work in practice, and how?", "a": "The intended beneficiaries are the people who'd use r\u00b2 = 0.77 (best model: random-forest regression kriging) to make a real decision, not just cite a number. That's the whole point of building this as a working pipeline with 6 documented stages rather than a one-off result."}, {"q": "If someone only remembers one thing from this project, what should it be?", "a": "That r\u00b2 = 0.77 (best model: random-forest regression kriging) isn't just a number on a slide, it came from a full pipeline of 6 deliberate steps, each one tested and documented, from 7-criterion gis-mcda overlay all the way through to suitability map. Every claim here traces back to real code and real data."}];
+const CONVO_SECONDS_PER_TURN = 35;
+let convoIdx = 0;
+let convoPlaying = false;
+let convoTimer = null;
+let convoElapsedMs = 0;
+
+function convoAppendTurn(i) {
+  const t = convoTurns[i];
+  const log = document.getElementById('convo-log');
+  const qRow = document.createElement('div');
+  qRow.className = 'convo-row';
+  qRow.innerHTML = '<div class="convo-avatar" style="display:flex;align-items:center;justify-content:center;background:var(--bg);font-size:11px;color:var(--text-secondary)">Q</div><div class="convo-bubble q">' + t.q + '</div>';
+  log.appendChild(qRow);
+  const aRow = document.createElement('div');
+  aRow.className = 'convo-row mine';
+  aRow.innerHTML = '<img class="convo-avatar" src="avatar.png" alt="Naziru"><div class="convo-bubble a">' + t.a + '</div>';
+  log.appendChild(aRow);
+  log.scrollTop = log.scrollHeight;
+}
+
+function convoUpdateCounter() {
+  document.getElementById('convo-counter').textContent = (convoIdx) + ' / ' + convoTurns.length;
+}
+
+function convoTick() {
+  convoElapsedMs += 200;
+  const pct = Math.min(100, (convoElapsedMs / (CONVO_SECONDS_PER_TURN * 1000)) * 100);
+  document.getElementById('convo-progress-bar').style.width = pct + '%';
+  if (convoElapsedMs >= CONVO_SECONDS_PER_TURN * 1000) {
+    convoElapsedMs = 0;
+    if (convoIdx < convoTurns.length) {
+      convoAppendTurn(convoIdx);
+      convoIdx++;
+      convoUpdateCounter();
+    }
+    if (convoIdx >= convoTurns.length) {
+      convoStop();
+      document.getElementById('convo-play-btn').textContent = 'Replay';
+    }
+  }
+}
+
+function convoStart() {
+  if (convoIdx >= convoTurns.length) {
+    document.getElementById('convo-log').innerHTML = '';
+    convoIdx = 0;
+    convoElapsedMs = 0;
+    convoUpdateCounter();
+  }
+  if (convoIdx === 0 && document.getElementById('convo-log').children.length === 0) {
+    convoAppendTurn(0);
+    convoIdx = 1;
+    convoUpdateCounter();
+  }
+  convoPlaying = true;
+  document.getElementById('convo-play-btn').textContent = 'Pause';
+  convoTimer = setInterval(convoTick, 200);
+}
+
+function convoStop() {
+  convoPlaying = false;
+  document.getElementById('convo-play-btn').textContent = 'Play';
+  if (convoTimer) { clearInterval(convoTimer); convoTimer = null; }
+}
+
+function convoToggle() {
+  if (convoPlaying) { convoStop(); } else { convoStart(); }
+}
+
+convoUpdateCounter();
 </script>
 <script>
 async function sendQuestion() {
