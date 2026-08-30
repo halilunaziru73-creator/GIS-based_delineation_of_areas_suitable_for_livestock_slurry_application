@@ -198,7 +198,7 @@ little spatial structure in its errors).
 ├── Tudela_Slurry_Suitability_Merged_Report.docx      # Combined report: MCDA + RK/DL methodology and results
 ├── manuscript/
 │   └── Slurry_Suitability_RegressionKriging_DeepLearning_Manuscript.docx
-│                                                       # Q1-journal-style manuscript — 15 pages, 12 figures,
+│                                                       # Manuscript — 15 pages, 12 figures,
 │                                                       # 2 tables, 14 references, clickable internal citations
 ├── code/                                              # Full reproducible Python pipeline
 │   ├── build_covariates.py
