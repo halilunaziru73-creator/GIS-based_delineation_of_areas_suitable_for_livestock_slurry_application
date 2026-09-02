@@ -2,7 +2,7 @@
 
 # GIS-Based Delineation of Areas Suitable for Livestock Slurry Application
 
-### Case Study — Tudela, Navarre, Spain
+### Case Study, Tudela, Navarre, Spain
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21760026.svg)](https://doi.org/10.5281/zenodo.21760026)
@@ -60,22 +60,22 @@ municipality of Tudela (Navarre, Spain) through two complementary layers of anal
 | **2. Continuous suitability surface** | Fuzzy Suitability Index (SI), Regression Kriging, and deep-learning surrogates | Continuous 0–100 suitability surface across the candidate zone |
 
 The continuous layer is built and validated with:
-- **Regression Kriging** — linear-trend (RK-LM) and random-forest-trend (RK-RF) variants, via PyKrige
-- **Deep learning surrogates** — a dense MLP and a patch-based CNN (TensorFlow/Keras)
-- **Rigorous validation** — spatial block cross-validation, Moran's I of residuals, permutation feature importance, and a Taylor diagram
+- **Regression Kriging**, linear-trend (RK-LM) and random-forest-trend (RK-RF) variants, via PyKrige
+- **Deep learning surrogates**, a dense MLP and a patch-based CNN (TensorFlow/Keras)
+- **Rigorous validation**, spatial block cross-validation, Moran's I of residuals, permutation feature importance, and a Taylor diagram
 
 ---
 
 ## Methodology Pipeline
 
 ```
- 1. build_covariates.py     → 25 m raster covariate stack (slope, distances, soil, land use, NVZ)
- 2. mcda_reference.py       → hard-constraint candidate zone + continuous fuzzy Suitability Index
- 3. sample_points.py        → pseudo-observation network + spatial block train/test split
- 4. regression_kriging.py   → RK-LM & RK-RF fitting, variogram modelling, full-grid prediction
- 5. deep_learning.py        → DL-MLP & DL-CNN training, full-grid prediction
- 6. validation_stats.py     → Moran's I, Taylor-diagram statistics, permutation importance
- 7. make_figures_1–5.py     → all 12 publication-quality figures
+ 1. build_covariates.py → 25 m raster covariate stack (slope, distances, soil, land use, NVZ)
+ 2. mcda_reference.py → hard-constraint candidate zone + continuous fuzzy Suitability Index
+ 3. sample_points.py → pseudo-observation network + spatial block train/test split
+ 4. regression_kriging.py → RK-LM & RK-RF fitting, variogram modelling, full-grid prediction
+ 5. deep_learning.py → DL-MLP & DL-CNN training, full-grid prediction
+ 6. validation_stats.py → Moran's I, Taylor-diagram statistics, permutation importance
+ 7. make_figures_1–5.py → all 12 publication-quality figures
 ```
 
 ---
@@ -92,7 +92,7 @@ Held-out spatial-block test set, *n* = 127:
 | DL-CNN | 9.90 | 7.82 | 0.620 | 0.87 | 0.061 |
 
 **Random-forest regression kriging (RK-RF)** gave the most accurate and best spatially
-behaved reconstruction of the continuous suitability surface — lowest error, highest
+behaved reconstruction of the continuous suitability surface, lowest error, highest
 fit, and lowest residual spatial autocorrelation (a well-behaved model should leave
 little spatial structure in its errors).
 
@@ -104,13 +104,13 @@ little spatial structure in its errors).
 <tr>
 <td width="50%">
 
-**Figure 1 — Study Area & DEM**
+**Figure 1, Study Area & DEM**
 ![Study area and digital elevation model](figures/fig1_study_area_dem.png)
 
 </td>
 <td width="50%">
 
-**Figure 2 — Exclusion Criteria**
+**Figure 2, Exclusion Criteria**
 ![Exclusion criteria layers](figures/fig2_exclusion_criteria.png)
 
 </td>
@@ -118,13 +118,13 @@ little spatial structure in its errors).
 <tr>
 <td width="50%">
 
-**Figure 3 — Candidate Zone & Sample Points**
+**Figure 3, Candidate Zone & Sample Points**
 ![Candidate zone and sample points](figures/fig3_candidate_zone_samples.png)
 
 </td>
 <td width="50%">
 
-**Figure 4 — Reference Suitability Index**
+**Figure 4, Reference Suitability Index**
 ![Reference suitability index](figures/fig4_reference_SI.png)
 
 </td>
@@ -132,13 +132,13 @@ little spatial structure in its errors).
 <tr>
 <td width="50%">
 
-**Figure 5 — Variogram**
+**Figure 5, Variogram**
 ![Variogram model](figures/fig5_variogram.png)
 
 </td>
 <td width="50%">
 
-**Figure 6 — RK Prediction Variance**
+**Figure 6, RK Prediction Variance**
 ![Regression kriging prediction variance](figures/fig6_RK_prediction_variance.png)
 
 </td>
@@ -146,13 +146,13 @@ little spatial structure in its errors).
 <tr>
 <td width="50%">
 
-**Figure 7 — Deep Learning Architectures & Training**
+**Figure 7, Deep Learning Architectures & Training**
 ![Deep learning architectures and training curves](figures/fig7_DL_architectures_training.png)
 
 </td>
 <td width="50%">
 
-**Figure 8 — Observed vs. Predicted**
+**Figure 8, Observed vs. Predicted**
 ![Observed vs predicted scatter](figures/fig8_obs_vs_pred_scatter.png)
 
 </td>
@@ -160,13 +160,13 @@ little spatial structure in its errors).
 <tr>
 <td width="50%">
 
-**Figure 9 — Taylor Diagram**
+**Figure 9, Taylor Diagram**
 ![Taylor diagram](figures/fig9_taylor_diagram.png)
 
 </td>
 <td width="50%">
 
-**Figure 10 — Model Comparison Maps**
+**Figure 10, Model Comparison Maps**
 ![Model comparison maps](figures/fig10_model_comparison_maps.png)
 
 </td>
@@ -174,13 +174,13 @@ little spatial structure in its errors).
 <tr>
 <td width="50%">
 
-**Figure 11 — Ensemble Uncertainty**
+**Figure 11, Ensemble Uncertainty**
 ![Ensemble uncertainty](figures/fig11_ensemble_uncertainty.png)
 
 </td>
 <td width="50%">
 
-**Figure 12 — Feature Importance**
+**Figure 12, Feature Importance**
 ![Permutation feature importance](figures/fig12_feature_importance.png)
 
 </td>
@@ -195,31 +195,31 @@ little spatial structure in its errors).
 .
 ├── README.md
 ├── LICENSE
-├── Tudela_Slurry_Suitability_Merged_Report.docx      # Combined report: MCDA + RK/DL methodology and results
+├── Tudela_Slurry_Suitability_Merged_Report.docx # Combined report: MCDA + RK/DL methodology and results
 ├── manuscript/
-│   └── Slurry_Suitability_RegressionKriging_DeepLearning_Manuscript.docx
-│                                                       # Manuscript — 15 pages, 12 figures,
-│                                                       # 2 tables, 14 references, clickable internal citations
-├── code/                                              # Full reproducible Python pipeline
-│   ├── build_covariates.py
-│   ├── mcda_reference.py
-│   ├── sample_points.py
-│   ├── regression_kriging.py
-│   ├── deep_learning.py
-│   ├── validation_stats.py
-│   ├── make_figures_1.py … make_figures_5.py
-│   └── cartohelpers.py                                # shared cartographic helpers (scale bar, north arrow, styling)
-├── figures/                                           # All 12 publication-quality figures (300 dpi PNG)
-├── outputs_data/                                      # Numeric results (JSON) and pseudo-observation points (CSV)
-└── source_data/                                       # Original 8 source GIS layers (see "Source Data" section below)
-    ├── AOI/
-    ├── Digital elevation model/
-    ├── Land use-Land cover/
-    ├── Municipal boundary/
-    ├── Nitrate vulnerable and polluted water zones/
-    ├── Protected natural areas/
-    ├── Surface water bodies/
-    └── Urban areas/
+│ └── Slurry_Suitability_RegressionKriging_DeepLearning_Manuscript.docx
+│ # Manuscript, 15 pages, 12 figures,
+│ # 2 tables, 14 references, clickable internal citations
+├── code/ # Full reproducible Python pipeline
+│ ├── build_covariates.py
+│ ├── mcda_reference.py
+│ ├── sample_points.py
+│ ├── regression_kriging.py
+│ ├── deep_learning.py
+│ ├── validation_stats.py
+│ ├── make_figures_1.py … make_figures_5.py
+│ └── cartohelpers.py # shared cartographic helpers (scale bar, north arrow, styling)
+├── figures/ # All 12 publication-quality figures (300 dpi PNG)
+├── outputs_data/ # Numeric results (JSON) and pseudo-observation points (CSV)
+└── source_data/ # Original 8 source GIS layers (see "Source Data" section below)
+ ├── AOI/
+ ├── Digital elevation model/
+ ├── Land use-Land cover/
+ ├── Municipal boundary/
+ ├── Nitrate vulnerable and polluted water zones/
+ ├── Protected natural areas/
+ ├── Surface water bodies/
+ └── Urban areas/
 ```
 
 ---
@@ -270,23 +270,23 @@ pip install geopandas rasterio shapely pyproj fiona pykrige scikit-learn tensorf
 
 The 8 source layers are already included in [`source_data/`](./source_data).
 All scripts resolve `source_data/` and `outputs_data/` automatically relative
-to the repository root, so they run as-is from any location — no path
+to the repository root, so they run as-is from any location, no path
 editing required.
 
 Run in order from the repository root:
 
 ```bash
-python code/build_covariates.py      # → covariates.npz, grid_meta.json
-python code/mcda_reference.py        # → mcda_reference.npz, mcda_stats.json
-python code/sample_points.py         # → sample_points.csv
-python code/regression_kriging.py    # → RK_grid_prediction.npz, variogram_residuals.npz, rk_results.json
-python code/deep_learning.py         # → DL_grid_predictions.npz, dl_training_history.npz, dl_results.json
-python code/validation_stats.py      # → validation_extra.json, feature_importance.json
-python code/make_figures_1.py        # ┐
-python code/make_figures_2.py        # │
-python code/make_figures_3.py        # ├─ figures/*.png
-python code/make_figures_4.py        # │
-python code/make_figures_5.py        # ┘
+python code/build_covariates.py # → covariates.npz, grid_meta.json
+python code/mcda_reference.py # → mcda_reference.npz, mcda_stats.json
+python code/sample_points.py # → sample_points.csv
+python code/regression_kriging.py # → RK_grid_prediction.npz, variogram_residuals.npz, rk_results.json
+python code/deep_learning.py # → DL_grid_predictions.npz, dl_training_history.npz, dl_results.json
+python code/validation_stats.py # → validation_extra.json, feature_importance.json
+python code/make_figures_1.py # ┐
+python code/make_figures_2.py # │
+python code/make_figures_3.py # ├─ figures/*.png
+python code/make_figures_4.py # │
+python code/make_figures_5.py # ┘
 ```
 
 
