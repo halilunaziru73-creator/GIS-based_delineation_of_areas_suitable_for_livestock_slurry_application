@@ -35,6 +35,13 @@ land suitable for livestock slurry application.
 
 **Results.** The random-forest regression-kriging model achieved the best held-out performance (RMSE = 7.78, R² = 0.77), outperforming the deep-learning surrogates (RMSE ≈ 9.9, R² ≈ 0.62) and classical linear-trend kriging (RMSE = 11.0, R² = 0.53), while also producing the lowest residual spatial autocorrelation. Permutation importance identified Nitrate Vulnerable Zone status, slope, and distance to surface water as the dominant covariates.
 
+## QGIS Outputs
+
+![Slurry Application Suitability in Municipality of Tudela, Navarra](qgis/Tudela_Slurry_Suitability_Map_Layout.png)
+*Cartographic map layout produced in QGIS showing the discrete suitability classes (Non Suitable, High Constraints, Partial Constraints, Optimal Location) alongside urban areas, riverbeds, and wetlands across the municipality of Tudela, Navarra. CRS: ETRS89 / UTM zone 30N. Data sources: CNIG, IDENA, MITECO, EEA, Copernicus, ESDAC. Co-authored with Hashim Monir Ambia.*
+
+The QGIS project file and the underlying vector layers (`qgis/Tudela_Slurry_Suitability_QGIS_Project.qgz` and `qgis/Tudela_Slurry_Suitability_Layers.gpkg`) are included in this repository so the map can be reopened and re-styled directly in QGIS.
+
 ## Table of Contents
 
 - [Overview](#overview)
